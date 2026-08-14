@@ -15,7 +15,10 @@ ASSETS_DIR = os.path.join(PLUGIN_ROOT, 'assets')
 PROFILE_PKG = os.path.expandvars(r'%USERPROFILE%\.dsh\profiles\web\node_modules\@dawn\dsh-capsule-skin')
 
 def sync_to_profile(name):
-    """把新增皮肤同步到 profile 副本（pnpm file: 是拷贝不是链接）"""
+    """把新增皮肤同步到 profile 副本（仅本地开发模式；scan API 场景脚本直接跑在 profile 内无需同步）"""
+    if not os.path.isdir(PROFILE_PKG):
+        print(f"⏭️  跳过 profile 同步（{PROFILE_PKG} 不存在——非本机开发模式）")
+        return
     src = os.path.join(ASSETS_DIR, name)
     dst = os.path.join(PROFILE_PKG, 'assets', name)
     os.makedirs(os.path.dirname(dst), exist_ok=True)
