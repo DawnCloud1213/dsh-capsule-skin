@@ -11,30 +11,41 @@ DeepSeek Harness (dsh) Web UI 壁纸皮肤插件：**胶囊侧边栏 · 暗色�
 ## 安装
 
 ```sh
-# 方式一：从 GitHub 仓库（推荐，含内置壁纸）
-dsh plugin --profile web add github:<你的用户名>/dsh-capsule-skin
+# 从 GitHub 仓库（插件框架，不含壁纸素材）
+dsh plugin --profile web add github:DawnCloud1213/dsh-capsule-skin
 
-# 方式二：本地目录（开发调试）
+# 或本地目录（开发调试）
 dsh plugin --profile web add file:C:/path/to/dsh-capsule-skin
 ```
 
 装完**重启 dsh web**（`dsh web`），浏览器强刷（Ctrl+Shift+R）。
 
+> 仓库不内置壁纸素材（版权考虑）。装完是空框架，按下方「添加壁纸」操作后才有皮肤可选。
+
 ## 使用
 
 1. 重启后侧边栏底部出现「🖼 壁纸皮肤」按钮
-2. 点击弹出壁纸列表（内置壁纸 + 你的壁纸），点选即切换，选择自动记忆
-3. 「🔄 扫描新壁纸」：扫描壁纸目录（默认 `D:\Wallpaper`）中未处理过的图片，自动生成皮肤
+2. 点击弹出壁纸列表，点选即切换，选择自动记忆
 
-### 自定义壁纸目录
+## 添加壁纸
 
-设置环境变量 `DSH_SKIN_WALLPAPER_DIR` 指向你的壁纸文件夹，再点「扫描新壁纸」：
+**方式一：WebUI 一键扫描（推荐）**
+1. 把壁纸图片放入壁纸目录（默认 `D:\Wallpaper`）
+2. WebUI 点「🖼 壁纸皮肤」→「🔄 扫描新壁纸」
+3. 等提示完成后重新打开列表，新壁纸出现，点选即用
 
+**方式二：指定自己的壁纸目录**
 ```sh
-# Windows（临时）
 set DSH_SKIN_WALLPAPER_DIR=E:\my-wallpapers
 dsh web
 ```
+然后同样点「扫描新壁纸」。
+
+**方式三：命令行手动生成**
+```sh
+python scripts/gen_skin.py "D:\任意壁纸.jpg"
+```
+刷新浏览器页面即可见。
 
 > 扫描依赖 Python 3.10+ 和 `material-color-utilities`：
 > ```sh
