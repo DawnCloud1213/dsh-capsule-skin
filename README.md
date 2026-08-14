@@ -30,18 +30,11 @@ dsh plugin --profile web add file:C:/path/to/dsh-capsule-skin
 ## 添加壁纸
 
 **方式一：WebUI 一键扫描（推荐）**
-1. 把壁纸图片放入壁纸目录（默认 `D:\Wallpaper`）
-2. WebUI 点「🖼 壁纸皮肤」→「🔄 扫描新壁纸」
-3. 等提示完成后重新打开列表，新壁纸出现，点选即用
+1. 打开「🖼 壁纸皮肤」浮层
+2. 在「📁 壁纸目录」输入框填你的壁纸文件夹（默认 `D:\Wallpaper`），点「保存目录」
+3. 点「🔄 扫描新壁纸」，等提示完成后重新打开列表，新壁纸出现，点选即用
 
-**方式二：指定自己的壁纸目录**
-```sh
-set DSH_SKIN_WALLPAPER_DIR=E:\my-wallpapers
-dsh web
-```
-然后同样点「扫描新壁纸」。
-
-**方式三：命令行手动生成**
+**方式二：命令行手动生成**
 ```sh
 python scripts/gen_skin.py "D:\任意壁纸.jpg"
 ```
@@ -51,7 +44,7 @@ python scripts/gen_skin.py "D:\任意壁纸.jpg"
 > ```sh
 > pip install material-color-utilities -i https://pypi.tuna.tsinghua.edu.cn/simple
 > ```
-> 可用 `DSH_SKIN_PYTHON` 指定 Python 可执行文件。
+> 可用 `DSH_SKIN_PYTHON` 环境变量指定 Python 可执行文件（仅在需要自定义时设置）。
 
 ## 开发
 
