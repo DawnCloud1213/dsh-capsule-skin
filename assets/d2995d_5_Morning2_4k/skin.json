@@ -1,0 +1,32 @@
+{
+  "tokens": {
+    "--dsw-alias-bg-base": "rgb(10, 21, 25)",
+    "--dsw-alias-bg-layer-1": "rgb(22, 33, 37)",
+    "--dsw-alias-bg-layer-2": "rgb(39, 50, 54)",
+    "--dsw-alias-bg-layer-3": "rgb(50, 61, 66)",
+    "--dsw-alias-border-l1": "rgb(182, 197, 204)",
+    "--dsw-alias-border-l2": "rgb(227, 243, 250)",
+    "--dsw-alias-brand-primary": "rgb(219, 244, 255)",
+    "--dsw-alias-label-primary": "rgb(255, 255, 255)",
+    "--dsw-alias-label-secondary": "rgb(255, 255, 255)",
+    "--dsw-alias-state-error": "rgb(255, 236, 233)",
+    "--dsw-alias-interactive-hover": "rgb(39, 211, 255)",
+    "--dsw-alias-button-primary-fill": "rgb(219, 244, 255)",
+    "--dsw-alias-button-primary-text": "rgb(0, 0, 0)",
+    "--dsw-specific-sidebar-fill": "rgb(39, 50, 54)"
+  },
+  "meta": {
+    "name": "d2995d_5_Morning2_4k",
+    "display": "d2995d_5_Morning2_4k",
+    "source": "D:\\Wallpaper\\d2995d_5_Morning2_4k.jpg",
+    "seed": "#dbf4ff",
+    "dark": {
+      "surface": "rgb(10, 21, 25)",
+      "surface_container": "rgb(39, 50, 54)",
+      "on_surface": "rgb(255, 255, 255)",
+      "primary": "rgb(219, 244, 255)",
+      "on_primary": "rgb(0, 0, 0)",
+      "primary_container": "rgb(39, 211, 255)"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+- insert:
+    - id: ui-skin-capsule
+      name: '@dawn/dsh-capsule-skin'

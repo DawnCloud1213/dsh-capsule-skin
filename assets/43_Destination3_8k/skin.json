@@ -1,0 +1,32 @@
+{
+  "tokens": {
+    "--dsw-alias-bg-base": "rgb(17, 19, 28)",
+    "--dsw-alias-bg-layer-1": "rgb(29, 31, 41)",
+    "--dsw-alias-bg-layer-2": "rgb(46, 48, 58)",
+    "--dsw-alias-bg-layer-3": "rgb(57, 59, 70)",
+    "--dsw-alias-border-l1": "rgb(192, 194, 210)",
+    "--dsw-alias-border-l2": "rgb(238, 239, 255)",
+    "--dsw-alias-brand-primary": "rgb(238, 239, 255)",
+    "--dsw-alias-label-primary": "rgb(255, 255, 255)",
+    "--dsw-alias-label-secondary": "rgb(255, 255, 255)",
+    "--dsw-alias-state-error": "rgb(255, 236, 233)",
+    "--dsw-alias-interactive-hover": "rgb(176, 192, 255)",
+    "--dsw-alias-button-primary-fill": "rgb(238, 239, 255)",
+    "--dsw-alias-button-primary-text": "rgb(0, 0, 0)",
+    "--dsw-specific-sidebar-fill": "rgb(46, 48, 58)"
+  },
+  "meta": {
+    "name": "43_Destination3_8k",
+    "display": "43_Destination3_8k",
+    "source": "D:\\Wallpaper\\43_Destination3_8k.jpg",
+    "seed": "#eeefff",
+    "dark": {
+      "surface": "rgb(17, 19, 28)",
+      "surface_container": "rgb(46, 48, 58)",
+      "on_surface": "rgb(255, 255, 255)",
+      "primary": "rgb(238, 239, 255)",
+      "on_primary": "rgb(0, 0, 0)",
+      "primary_container": "rgb(176, 192, 255)"
+    }
+  }
+}
