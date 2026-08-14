@@ -113,8 +113,32 @@ def generate(wallpaper_path, name):
     print(f"✅ skins.json 清单: {len(rebuild_manifest())} 个皮肤")
 
 if __name__ == '__main__':
+    # 批量扫描模式: python gen_skin.py --scan <壁纸目录>
+    if len(sys.argv) >= 2 and sys.argv[1] == '--scan':
+        wdir = sys.argv[2] if len(sys.argv) > 2 else r'D:\Wallpaper'
+        exts = {'.jpg', '.jpeg', '.png', '.webp', '.bmp'}
+        targets = []
+        for fn in sorted(os.listdir(wdir)):
+            if os.path.splitext(fn)[1].lower() not in exts:
+                continue
+            if any(k in fn.lower() for k in ('mask', 'blur', 'normal', 'phase', 'mix')):
+                continue  # 跳过特效/遮罩图
+            targets.append(os.path.join(wdir, fn))
+        added = []
+        for wp in targets:
+            name = os.path.splitext(os.path.basename(wp))[0]
+            # 已有则跳过（幂等）
+            if os.path.isdir(os.path.join(ASSETS_DIR, name)):
+                continue
+            try:
+                generate(wp, name)
+                added.append(name)
+            except Exception as e:
+                print(f"⚠️ {name} 失败: {e}")
+        print(f"\n=== 扫描完成: 新增 {len(added)} 个皮肤: {added} ===")
+        sys.exit(0)
     if len(sys.argv) < 2:
-        print('用法: python gen_skin.py <壁纸路径> [皮肤名]')
+        print('用法: python gen_skin.py <壁纸路径> [皮肤名] | python gen_skin.py --scan <壁纸目录>')
         sys.exit(1)
     wp = sys.argv[1]
     name = sys.argv[2] if len(sys.argv) > 2 else os.path.splitext(os.path.basename(wp))[0]
