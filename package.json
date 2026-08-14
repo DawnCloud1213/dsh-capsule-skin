@@ -2,7 +2,7 @@
   "name": "@dawn/dsh-capsule-skin",
   "version": "0.1.0",
   "private": true,
-  "description": "dsh 壁纸皮肤插件：胶囊侧边栏 · 暗色主题 · 壁纸主题色取色 · 热切换/热添加",
+  "description": "dsh 壁纸皮肤插件：胶囊侧边栏 · 暗色主题 · 壁纸主题色取色 · 热切换/热添加 · 实时壁纸美化（滤镜/氛围/色调/水印/取景）",
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
