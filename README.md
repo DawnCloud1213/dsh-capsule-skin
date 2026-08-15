@@ -130,3 +130,10 @@ dsh-capsule-skin/
 
 - 颜色变量覆盖走 `ctx.theme.overrideTokens`（rc.6 官方接口），明暗同为暗色板（插件定位暗色主题）
 - macOS 已做平台适配但尚未真机全量验证；如遇问题欢迎提 issue（附报错/截图）
+
+---
+
+## 贡献者
+
+- [DawnCloud1213](https://github.com/DawnCloud1213) — 项目维护者
+- [MollyRy](https://github.com/MollyRy) — wallpaper-lab 实时壁纸美化层（滤镜 / 氛围 / 色调 / 水印 / 取景）
