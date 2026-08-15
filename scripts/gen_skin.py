@@ -59,10 +59,15 @@ def generate(wallpaper_path, name):
     os.makedirs(out_dir, exist_ok=True)
     img = Image.open(wallpaper_path).convert('RGB')
 
-    # 1. MCU 配色板（暗色为主，明色也留一份备用）
+    # 1. MCU 配色板：按图片平均亮度选板（亮图→浅色板浅底深字；暗图→暗色板深底浅字）
+    small = img.copy().resize((64, 64))
+    px = list(small.getdata())
+    avg = tuple(sum(c[i] for c in px) // len(px) for i in range(3))
+    lum = (0.2126 * avg[0] + 0.7152 * avg[1] + 0.0722 * avg[2]) / 255
+    is_light = lum > 0.5
     theme = theme_from_image(img)
-    dark, light = theme.schemes.dark, theme.schemes.light
-    seed = dark.primary
+    scheme = theme.schemes.light if is_light else theme.schemes.dark
+    seed = scheme.primary
 
     def to_rgb(hexstr):
         h = hexstr.lstrip('#')
@@ -77,29 +82,31 @@ def generate(wallpaper_path, name):
     bg_path = os.path.join(out_dir, 'bg.jpg')
     bg.save(bg_path, 'JPEG', quality=68, optimize=True)
 
-    # 3. token 表：MCU 语义色 → dsh --dsw-alias-*
+    # 3. token 表：MCU 语义色 → dsh --dsw-alias-*（按图片亮度选浅/暗色板）
     tokens = {
-        '--dsw-alias-bg-base': to_rgb(dark.surface),
-        '--dsw-alias-bg-layer-1': to_rgb(dark.surface_container_low),
-        '--dsw-alias-bg-layer-2': to_rgb(dark.surface_container),
-        '--dsw-alias-bg-layer-3': to_rgb(dark.surface_container_high),
-        '--dsw-alias-border-l1': to_rgb(dark.outline_variant),
-        '--dsw-alias-border-l2': to_rgb(dark.outline),
-        '--dsw-alias-brand-primary': to_rgb(dark.primary),
-        '--dsw-alias-label-primary': to_rgb(dark.on_surface),
-        '--dsw-alias-label-secondary': to_rgb(dark.on_surface_variant),
-        '--dsw-alias-state-error': to_rgb(dark.error),
-        '--dsw-alias-interactive-hover': to_rgb(dark.primary_container),
-        '--dsw-alias-button-primary-fill': to_rgb(dark.primary),
-        '--dsw-alias-button-primary-text': to_rgb(dark.on_primary),
-        '--dsw-specific-sidebar-fill': to_rgb(dark.surface_container),
+        '--dsw-alias-bg-base': to_rgb(scheme.surface),
+        '--dsw-alias-bg-layer-1': to_rgb(scheme.surface_container_low),
+        '--dsw-alias-bg-layer-2': to_rgb(scheme.surface_container),
+        '--dsw-alias-bg-layer-3': to_rgb(scheme.surface_container_high),
+        '--dsw-alias-border-l1': to_rgb(scheme.outline_variant),
+        '--dsw-alias-border-l2': to_rgb(scheme.outline),
+        '--dsw-alias-brand-primary': to_rgb(scheme.primary),
+        '--dsw-alias-label-primary': to_rgb(scheme.on_surface),
+        '--dsw-alias-label-secondary': to_rgb(scheme.on_surface_variant),
+        '--dsw-alias-state-error': to_rgb(scheme.error),
+        '--dsw-alias-interactive-hover': to_rgb(scheme.primary_container),
+        '--dsw-alias-button-primary-fill': to_rgb(scheme.primary),
+        '--dsw-alias-button-primary-text': to_rgb(scheme.on_primary),
+        '--dsw-specific-sidebar-fill': to_rgb(scheme.surface_container),
     }
     meta = {
         'name': name,
         'display': os.path.splitext(os.path.basename(wallpaper_path))[0],
         'source': wallpaper_path,
         'seed': seed,
-        'dark': {k: to_rgb(v) for k, v in dark.dict().items() if k in
+        'scheme': 'light' if is_light else 'dark',
+        'luminance': round(lum, 3),
+        'dark': {k: to_rgb(v) for k, v in theme.schemes.dark.dict().items() if k in
                  ('primary','on_primary','surface','on_surface','surface_container','primary_container')},
     }
     with open(os.path.join(out_dir, 'skin.json'), 'w', encoding='utf-8') as f:
@@ -108,7 +115,8 @@ def generate(wallpaper_path, name):
     print(f"✅ 种子色: {seed}")
     print(f"✅ 背景帧: {bg_path} ({bg.size[0]}x{bg.size[1]}, {os.path.getsize(bg_path)//1024}KB)")
     print(f"✅ tokens: {len(tokens)} 个 -> {os.path.join(out_dir, 'skin.json')}")
-    print(f"\n暗色板预览: primary={meta['dark']['primary']} surface={meta['dark']['surface']} on_surface={meta['dark']['on_surface']}")
+    print(f"\n{'浅色板' if is_light else '暗色板'}预览(亮度 {lum:.3f}): primary={to_rgb(scheme.primary)} "
+          f"surface={to_rgb(scheme.surface)} on_surface={to_rgb(scheme.on_surface)}")
 
     # 重建清单 + 同步 profile
     rebuild_manifest()
