@@ -174,3 +174,14 @@ for (const key of FILTER_KEYS) {
 | 老用户设置丢失 | key 不变 + LAB 结构不变（§4） |
 
 回滚：`git revert` 对应 commit 即可，改动集中在 `lib/client.js` 单文件。
+
+## 7. 运行副本同步（重要！实测踩坑记录）
+
+- **现象**：改完源码仓库后 GUI 无变化。
+- **根因**：运行中的 dsh web 加载的是**独立安装拷贝** `C:\Users\DawnCloud\.dsh\profiles\web\node_modules\@dawn\dsh-capsule-skin\`（`dsh plugin add file:...` 安装时复制，**非符号链接**），不是源码仓库 `E:\JUST_DO_IT\dsh-capsule-skin\`。该拷贝内含线上壁纸资源（热添加产生的 `assets/*/bg.jpg` 与 `skins.json`），**不可用 junction/符号链接替代**（会导致壁纸清单丢失）。
+- **同步步骤**（改完 `lib/*.js` 后执行）：
+  1. 对比差异，只同步实际改动的代码文件（如 `lib/client.js`）；**不要覆盖** `assets/skins.json` 与 `assets/*/`（线上数据）。
+  2. `Copy-Item <repo>\lib\client.js <profile>\node_modules\@dawn\dsh-capsule-skin\lib\client.js -Force`
+  3. 实测：服务**按请求读盘**，无需重启 dsh web；启动配置 rev 自动重新生成。
+  4. 浏览器**硬刷新（Ctrl+Shift+R）** 即可看到新代码。
+- 验证命令：`curl http://127.0.0.1:3080/plugins/@dawn/dsh-capsule-skin/client.js` 后检查新函数名（如 `capsuleBlurRow`）。
