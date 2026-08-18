@@ -126,7 +126,32 @@ dsh-capsule-skin/
 │   ├── skins.json      # 壁纸清单（热添加：文件更新 → 刷新页面即见）
 │   └── <壁纸名>/       # 每张壁纸一套（bg.jpg + skin.json）
 └── scripts/gen_skin.py # 壁纸→MCU取色→token表+背景帧→清单（幂等）
+└── scripts/gen_we_color.py # Wallpaper Engine 预览图→MCU token（gif 取第 0 帧）
+└── scripts/we_host_test.js # /we-wallpaper 路由离线自检（20 项，无需重启）
 ```
+
+---
+
+## Wallpaper Engine 动态壁纸兼容（v1）
+
+自动读取本机 Steam 库的 Wallpaper Engine 订阅（`SteamLibrary\steamapps\workshop\content\431960`），
+在「设置 → 壁纸皮肤」列表新增 **「🎬 Wallpaper Engine」分组**，点选即切换。
+
+| WE 类型 | 处理 |
+|---|---|
+| `video`（全部 H.264 MP4） | **真动态**：`<video muted loop playsinline autoplay>` 全屏播放，海报为 body 底，美化层（模糊/滤镜/取景/缩放）对视频生效 |
+| `scene`（scene.pkg + DXS 着色器） | **预览图降级**：专有格式浏览器无法渲染，用 `preview.gif`（动图）/ `preview.jpg`（静态）作背景 |
+| `web` / `application` / 无 project.json | 跳过或仅预览图 |
+
+- **流式直读，零复制**：GB 级视频经 `/we-wallpaper/f` 路由带 HTTP Range 直接流式播放，不打进插件包/仓库
+- **取色**：`/we-wallpaper/color` 对每个订阅项的预览图跑 Material You（python），按文件 mtime 缓存，懒加载于点选瞬间
+- **目录**：默认自动探测 SteamLibrary（D/C/E/F 盘 + Program Files），可在设置页手动覆盖为 `config.json` 的 `weDir`，或用环境变量 `DSH_SKIN_WE_DIR`
+- **安全**：路径穿越防护（realpath 前缀）+ 扩展名白名单 + 数字 workshopid 校验
+- **加载方式**：host 路由改动需**重启 `dsh web`**；client 改动经 client 管道热重载，强刷 **Ctrl+Shift+R** 即可
+- 依赖：`pip install material-color-utilities`（与扫描功能同一套，仅取色时调用 python）
+
+> 场景壁纸的实时渲染依赖 Wallpaper Engine 桌面端（专有场景图 + DirectX 着色器），浏览器内只能
+> 以预览图运行——这是技术硬限制，非插件缺陷。视频壁纸在 Chromium 内为真实动态背景。
 
 ## 已知限制
 
