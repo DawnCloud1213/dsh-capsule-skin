@@ -18,7 +18,38 @@ DeepSeek Harness (dsh) Web UI 壁纸皮肤插件：**胶囊侧边栏 · 暗色�
 
 ## 安装
 
-### Windows
+> **先确认装进的是哪个 profile。** 桌面端（DeepSeek Harness Desktop，Electron）启动的是
+> `desktop` profile，命令行的 `dsh web` 启动的是 `web` profile，两者互不相通：
+> 只执行 `dsh plugin --profile web add ...` 时，桌面端里不会出现「壁纸皮肤」。
+
+### 桌面端（DeepSeek Harness Desktop）
+
+桌面端用的是自带运行时，插件树在 `%USERPROFILE%\.dsh\profiles\desktop`
+（macOS / Linux 为 `~/.dsh/profiles/desktop`）。
+
+**方式一：桌面端界面内安装（推荐，可热生效）**
+
+1. 打开桌面端 → 左侧栏 **「插件」**
+2. **「添加插件」** 填本地绝对路径（例：`E:\JUST_DO_IT\dsh-capsule-skin`）或 `github:DawnCloud1213/dsh-capsule-skin`
+3. **安装** → 完成后点 **立即启用**
+4. 刷新界面（**Ctrl+R** / **Cmd+R**）；若界面未跟上，完全退出桌面端再启动
+
+**方式二：命令行（先完全退出桌面端）**
+
+```sh
+# 桌面端自带的 dsh；也可在「设置 → 命令行」里把 dsh 加进 PATH 后直接用 dsh
+"%LOCALAPPDATA%\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add file:E:/JUST_DO_IT/dsh-capsule-skin
+```
+
+pnpm 11 的供应链策略可能拦下 profile 里较新的依赖（提示 `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION`），
+此时在同一条命令末尾加 `--config.minimumReleaseAge=0` 再跑一次即可。
+
+> `file:` 安装是把插件**拷贝**进 profile 的 `node_modules`，不是符号链接：
+> 改完本仓库源码后要重新执行一次安装（或手动同步文件），profile 里才会是最新代码。
+
+### 命令行 dsh web（web profile）
+
+Windows：
 
 ```sh
 # 从 GitHub 安装
@@ -30,7 +61,7 @@ dsh plugin --profile web add file:C:/path/to/dsh-capsule-skin
 
 装完重启 `dsh web`，浏览器强刷 **Ctrl+Shift+R**。
 
-### macOS
+macOS：
 
 ```sh
 # 从 GitHub 安装
@@ -92,10 +123,12 @@ pip3 install material-color-utilities
 
 | 现象 | 处理 |
 |---|---|
-| 装完设置里没有「壁纸皮肤」页 | 重启 dsh web + 浏览器强刷（组合层变更不热更新） |
+| 装完设置里没有「壁纸皮肤」页 | 先确认装的是当前在用的 profile：**桌面端 = `desktop`，`dsh web` = `web`**，两者不互通；再重启并强刷（组合层变更不热更新） |
+| 桌面端里没有这个插件 | 插件只装在 `web` profile 了。按上文「桌面端」一节装进 `desktop` profile |
 | 点「扫描新壁纸」提示失败 | 检查 Python 依赖是否装好；目录是否存在 |
 | 壁纸切换后文字看不清 | 壁纸过亮时建议换暗色系壁纸；或降低壁纸目录里的亮度 |
-| 卸载插件 | `dsh plugin --profile web remove @dawn/dsh-capsule-skin`，重启即还原 |
+| 安装时提示 `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION` | pnpm 11 供应链策略拦下了 profile 里较新的依赖，命令末尾加 `--config.minimumReleaseAge=0` 重跑 |
+| 卸载插件 | 桌面端：`dsh plugin --profile desktop remove @dawn/dsh-capsule-skin`；`dsh web`：`dsh plugin --profile web remove @dawn/dsh-capsule-skin`，重启即还原 |
 
 ### 其他
 
